@@ -122,17 +122,6 @@ namespace Exam_Test.Controllers
             return RedirectToAction("Index");
         }
 
-        //[HttpDelete]
-        //public async Task<IActionResult> Delete(ExamModel examModel)
-        //{
-        //    var httpClient = _httpClientFactory.CreateClient("NewExam");
-
-        //    var examjson = new StringContent(examModel.ToJson(),Encoding.UTF8,Application.Json);
-
-        //    using var httpResponseMessage = await httpClient.DeleteAsync("ExamTitles", examjson);
-
-        //    httpResponseMessage.EnsureSuccessStatusCode();
-        //    return RedirectToAction("Index");
-        //}
+        
     }
 }
