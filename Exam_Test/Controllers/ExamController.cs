@@ -78,15 +78,46 @@ namespace Exam_Test.Controllers
             return View(category);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> ConfiemEdit(ExamModel examModel)
         {
-            
             var httpClient = _httpClientFactory.CreateClient("NewExam");
             var examjson = new StringContent(examModel.ToJson(), Encoding.UTF8, Application.Json);
-            
             using var httpResponseMessage = await httpClient.PutAsync($"ExamTitles/{examModel.Id}", examjson);
+            httpResponseMessage.EnsureSuccessStatusCode();
+            return RedirectToAction("Index");
+        }
+        
+        [HttpGet]
+        public  IActionResult Delete(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ExamModel category = null;
+            var httpClient = _httpClientFactory.CreateClient("NewExam");
+            var httpResponseMessage = httpClient.GetAsync($"ExamTitles/{id}");
 
+            if (httpResponseMessage.Result.IsSuccessStatusCode)
+            {
+                using var contentStream = httpResponseMessage.Result.Content.ReadAsAsync<ExamModel>();
+
+                category = contentStream.Result;
+            }
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfiemDelete(ExamModel examModel)
+        {
+            var httpClient = _httpClientFactory.CreateClient("NewExam");
+            var examjson = new StringContent(examModel.ToJson(), Encoding.UTF8, Application.Json);
+            using var httpResponseMessage = await httpClient.DeleteAsync($"ExamTitles/{examModel.Id}");
             httpResponseMessage.EnsureSuccessStatusCode();
             return RedirectToAction("Index");
         }

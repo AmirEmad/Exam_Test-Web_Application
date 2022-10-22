@@ -1,4 +1,6 @@
-﻿namespace Exam_Test.Models
+﻿using Newtonsoft.Json;
+
+namespace Exam_Test.Models
 {
     public class ExamModel
     {
