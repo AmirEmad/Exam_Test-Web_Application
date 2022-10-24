@@ -1,4 +1,5 @@
 ﻿using Exam_Test.Models;
+using Exam_Test.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,29 +8,17 @@ namespace Exam_Test.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IExamServices<ExamModel> _examServices;
 
-        public HomeController(ILogger<HomeController> logger , IHttpClientFactory httpClientFactory)
+        public HomeController(ILogger<HomeController> logger , IExamServices<ExamModel> examServices)
         {
             _logger = logger;
-            _httpClientFactory = httpClientFactory;
+            _examServices = examServices;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<ExamModel> exams = null;
-
-            var httpClient = _httpClientFactory.CreateClient("NewExam");
-            var httpResponseMessage = httpClient.GetAsync("ExamTitles");
-
-            if (httpResponseMessage.Result.IsSuccessStatusCode)
-            {
-                using var contentStream = httpResponseMessage.Result.Content.ReadAsAsync<IList<ExamModel>>();
-
-                exams = contentStream.Result;
-            }
-
-            return View(exams);
+            return View(await _examServices.GetAllAsync());
         }
 
         public IActionResult Privacy()

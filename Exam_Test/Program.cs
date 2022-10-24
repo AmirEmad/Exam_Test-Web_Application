@@ -1,3 +1,6 @@
+using Exam_Test.Models;
+using Exam_Test.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ builder.Services.AddControllersWithViews();
 //api_services
 builder.Services.AddHttpClient("NewExam", httpclient =>
     httpclient.BaseAddress = new Uri("https://localhost:7127/api/"));
+
+builder.Services.AddTransient<IExamServices<ExamModel>, ExamServices>();
 
 var app = builder.Build();
 
